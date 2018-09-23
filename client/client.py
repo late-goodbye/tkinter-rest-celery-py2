@@ -43,7 +43,8 @@ class Client(object):
         self.middlename = Tkinter.Entry(self.form).grid(row=2, column=1)
         self.born_date = Tkinter.Entry(self.form).grid(row=3, column=1)
 
-        self.save_btn = Tkinter.Button(self.form, text=u'Сохранить')
+        self.save_btn = Tkinter.Button(
+            self.form, text=u'Сохранить', command=self.send_data)
         self.save_btn.grid(row=5, column=0)
 
         self.cancel_btn = Tkinter.Button(
@@ -52,3 +53,7 @@ class Client(object):
 
     def run(self):
         self.root.mainloop()
+
+    def send_data(self):
+        pass
+        self.form.destroy()
