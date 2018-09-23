@@ -9,7 +9,6 @@ class Client(object):
         super(Client, self).__init__()
         self.host = host
         self.port = port
-        self.connector = '~'
 
         self.root = Tkinter.Tk()
 
@@ -30,6 +29,7 @@ class Client(object):
             width=self.btn_width)
 
         self.add_btn.bind('<Button-1>', self.open_form)
+        self.gen_btn.bind('<Button-1>', self.request_records)
 
         self.gen_btn.pack()
         self.add_btn.pack()
@@ -68,17 +68,18 @@ class Client(object):
     def send(self, message):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.host, self.port))
-        sock.sendall('add{}{}'.format(self.connector, message))
+        sock.sendall(message)
         sock.close()
-        self.form.destroy()
 
-    def request_records(self):
-        self.send('get')
+    def request_records(self, event):
+        self.send('gen')
 
     def send_data(self):
-        message = self.connector.join([field.get() for field in
+        connector = '~'
+        message = connector.join([field.get() for field in
             [self.lastname, self.firstname, self.middlename, self.birth_date]])
-        self.send(message)
+        self.send('add{}{}'.format(connector, message))
+        self.form.destroy()
 
 
 if __name__ == '__main__':
