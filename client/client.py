@@ -1,11 +1,14 @@
 # coding=utf8
 import Tkinter
+import socket
 
 
 class Client(object):
     """docstring for Client."""
-    def __init__(self):
+    def __init__(self, host='localhost', port=9000):
         super(Client, self).__init__()
+        self.host = host
+        self.port = port
 
         self.root = Tkinter.Tk()
 
@@ -62,7 +65,16 @@ class Client(object):
         self.root.mainloop()
 
     def send_data(self):
-        data = tuple(field.get() for field in
-            [self.lastname, self.firstname, self.middlename, self.born_date])
+        data = '~'.join([field.get() for field in
+            [self.lastname, self.firstname, self.middlename, self.born_date]])
         print data
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((self.host, self.port))
+        sock.sendall(data)
+        sock.close()
         self.form.destroy()
+
+
+if __name__ == '__main__':
+    client = Client()
+    client.run()
