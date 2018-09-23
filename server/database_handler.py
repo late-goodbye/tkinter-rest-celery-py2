@@ -3,7 +3,7 @@ import sqlite3
 
 class DatabaseHandler(object):
     """docstring for DatabaseHandler."""
-    def __init__(self, db_name: str='person'):
+    def __init__(self, db_name='person'):
         super(DatabaseHandler, self).__init__()
         self.db_name = db_name
         self.conn = sqlite3.connect('{}'.format(self.db_name))
@@ -20,12 +20,12 @@ class DatabaseHandler(object):
     def drop_table(self):
         self.cursor.execute('DROP TABLE IF EXISTS persons')
 
-    def add_person(self, person_info: tuple):
+    def add_person(self, person_info):
         self.cursor.execute("""
             INSERT INTO person (lastname, firstname, middlename, birth_date)
             VALUES (?, ?, ?, ?)
         """, person_info)
 
-    def get_persons(self):
+    def generate_records(self):
         self.cursor.execute('SELECT * FROM person')
         return self.cursor.fetchall()
