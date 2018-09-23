@@ -1,7 +1,6 @@
-from celery import Celery
 import socket
 from database_handler import DatabaseHandler
-
+from tasks import add_person, generate_records
 
 
 class Server(object):
@@ -21,11 +20,10 @@ class Server(object):
             print 'Connected by {}'.format(addr)
             self.data = tuple(conn.recv(1024).split('~'))
             if self.data[0] == 'add':
-                print 'Add person'
-                # self.dh.add_person(self.data[1:])
+                add_person(self.data[1:])
             elif self.data[0] == 'gen':
-                print 'Generate records'
-                # self.records = self.dh.generate_records()
+                print 'Put generate records task to query'
+                records = generate_records()
             elif self.data[0] == 'get':
                 # self.return_records()
                 print 'Return records'
@@ -34,13 +32,6 @@ class Server(object):
 
             print 'Received: {}'.format(self.data)
         sock.close()
-
-
-app = Celery('tasks', backend='amqp', broker='amqp://')
-
-@app.task
-def print_hello():
-    print 'Hello there'
 
 
 if __name__ == '__main__':
