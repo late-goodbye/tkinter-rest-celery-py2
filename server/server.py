@@ -1,5 +1,4 @@
 from celery import Celery
-import sqlite3
 import socket
 
 
