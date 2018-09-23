@@ -12,22 +12,43 @@ class Client(object):
         self.btn_width = 40
         self.gen_btn = Tkinter.Button(
             self.root,
-            text=u"Сгенерировать список записей",
+            text=u'Сгенерировать список записей',
             width=self.btn_width)
 
         self.add_btn = Tkinter.Button(
             self.root,
-            text=u"Добавить новую запись",
+            text=u'Добавить новую запись',
             width=self.btn_width)
 
         self.get_btn = Tkinter.Button(
             self.root,
-            text=u"Получить список записей",
+            text=u'Получить список записей',
             width=self.btn_width)
+
+        self.add_btn.bind('<Button-1>', self.open_form)
 
         self.gen_btn.pack()
         self.add_btn.pack()
         self.get_btn.pack()
+
+    def open_form(self, event):
+        self.form = Tkinter.Tk()
+        Tkinter.Label(self.form, text=u'Фамилия').grid(row=0, column=0)
+        Tkinter.Label(self.form, text=u'Имя').grid(row=1, column=0)
+        Tkinter.Label(self.form, text=u'Отчество').grid(row=2, column=0)
+        Tkinter.Label(self.form, text=u'Дата рождения').grid(row=3, column=0)
+
+        self.lastname = Tkinter.Entry(self.form).grid(row=0, column=1)
+        self.firstname = Tkinter.Entry(self.form).grid(row=1, column=1)
+        self.middlename = Tkinter.Entry(self.form).grid(row=2, column=1)
+        self.born_date = Tkinter.Entry(self.form).grid(row=3, column=1)
+
+        self.save_btn = Tkinter.Button(self.form, text=u'Сохранить')
+        self.save_btn.grid(row=5, column=0)
+
+        self.cancel_btn = Tkinter.Button(
+            self.form, text=u'Отмена', command=self.form.destroy)
+        self.cancel_btn.grid(row=5, column=1)
 
     def run(self):
         self.root.mainloop()
