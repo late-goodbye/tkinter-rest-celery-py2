@@ -30,6 +30,7 @@ class Client(object):
 
         self.add_btn.bind('<Button-1>', self.open_form)
         self.gen_btn.bind('<Button-1>', self.request_records)
+        self.get_btn.bind('<Button-1>', self.receive_records)
 
         self.gen_btn.pack()
         self.add_btn.pack()
@@ -73,6 +74,9 @@ class Client(object):
 
     def request_records(self, event):
         self.send('gen')
+
+    def receive_records(self, event):
+        self.send('get')
 
     def send_data(self):
         connector = '~'
