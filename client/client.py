@@ -50,8 +50,8 @@ class Client(object):
         self.middlename = Tkinter.Entry(self.form)
         self.middlename.grid(row=2, column=1)
 
-        self.born_date = Tkinter.Entry(self.form)
-        self.born_date.grid(row=3, column=1)
+        self.birth_date = Tkinter.Entry(self.form)
+        self.birth_date.grid(row=3, column=1)
 
         self.save_btn = Tkinter.Button(
             self.form, text=u'Сохранить', command=self.send_data)
@@ -66,7 +66,7 @@ class Client(object):
 
     def send_data(self):
         data = '~'.join([field.get() for field in
-            [self.lastname, self.firstname, self.middlename, self.born_date]])
+            [self.lastname, self.firstname, self.middlename, self.birth_date]])
         print data
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.host, self.port))
