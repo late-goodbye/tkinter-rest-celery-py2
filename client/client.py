@@ -38,10 +38,17 @@ class Client(object):
         Tkinter.Label(self.form, text=u'Отчество').grid(row=2, column=0)
         Tkinter.Label(self.form, text=u'Дата рождения').grid(row=3, column=0)
 
-        self.lastname = Tkinter.Entry(self.form).grid(row=0, column=1)
-        self.firstname = Tkinter.Entry(self.form).grid(row=1, column=1)
-        self.middlename = Tkinter.Entry(self.form).grid(row=2, column=1)
-        self.born_date = Tkinter.Entry(self.form).grid(row=3, column=1)
+        self.lastname = Tkinter.Entry(self.form)
+        self.lastname.grid(row=0, column=1)
+
+        self.firstname = Tkinter.Entry(self.form)
+        self.firstname.grid(row=1, column=1)
+
+        self.middlename = Tkinter.Entry(self.form)
+        self.middlename.grid(row=2, column=1)
+
+        self.born_date = Tkinter.Entry(self.form)
+        self.born_date.grid(row=3, column=1)
 
         self.save_btn = Tkinter.Button(
             self.form, text=u'Сохранить', command=self.send_data)
@@ -55,5 +62,7 @@ class Client(object):
         self.root.mainloop()
 
     def send_data(self):
-        pass
+        data = tuple(field.get() for field in
+            [self.lastname, self.firstname, self.middlename, self.born_date])
+        print data
         self.form.destroy()
