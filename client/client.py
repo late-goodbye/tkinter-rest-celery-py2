@@ -9,6 +9,7 @@ class Client(object):
         super(Client, self).__init__()
         self.host = host
         self.port = port
+        self.connector = '~'
 
         self.root = Tkinter.Tk()
 
@@ -64,15 +65,20 @@ class Client(object):
     def run(self):
         self.root.mainloop()
 
-    def send_data(self):
-        data = '~'.join([field.get() for field in
-            [self.lastname, self.firstname, self.middlename, self.birth_date]])
-        print data
+    def send(self, message):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.host, self.port))
-        sock.sendall(data)
+        sock.sendall('add{}{}'.format(self.connector, message))
         sock.close()
         self.form.destroy()
+
+    def request_records(self):
+        self.send('get')
+
+    def send_data(self):
+        message = self.connector.join([field.get() for field in
+            [self.lastname, self.firstname, self.middlename, self.birth_date]])
+        self.send(message)
 
 
 if __name__ == '__main__':
