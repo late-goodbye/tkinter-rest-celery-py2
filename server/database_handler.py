@@ -1,4 +1,6 @@
 import sqlite3
+import names
+from random import randint
 
 
 class DatabaseHandler(object):
@@ -33,3 +35,16 @@ class DatabaseHandler(object):
             SELECT lastname, firstname, middlename, birth_date FROM person
         """)
         return self.cursor.fetchall()
+
+    def fill_database(self, n):
+        for i in xrange(n):
+            lastname = names.get_last_name()
+            firstname = names.get_first_name()
+            middlename = names.get_first_name()
+            birth_date = '.'.join([
+                str(randint(1, 29)),
+                str(randint(1, 12)),
+                str(randint(1922, 2000))
+            ])
+
+            self.add_person((lastname, firstname, middlename, birth_date, ))
