@@ -1,6 +1,8 @@
 # coding=utf8
 import Tkinter
 import socket
+import thread
+from time import sleep
 
 
 class Client(object):
@@ -9,10 +11,14 @@ class Client(object):
         super(Client, self).__init__()
         self.host = host
         self.port = port
+        self.records_requested_flag = False
+        self.records_generated_flag = False
+        self.records_request_sent_flag = False
+        self.results = []
 
         self.root = Tkinter.Tk()
 
-        self.btn_width = 40
+        self.btn_width = 50
         self.gen_btn = Tkinter.Button(
             self.root,
             text=u'Сгенерировать список записей',
@@ -27,6 +33,7 @@ class Client(object):
             self.root,
             text=u'Получить список записей',
             width=self.btn_width)
+        self.get_btn['state'] = 'disabled'
 
         self.add_btn.bind('<Button-1>', self.open_form)
         self.gen_btn.bind('<Button-1>', self.request_records)
@@ -67,24 +74,73 @@ class Client(object):
         self.root.mainloop()
 
     def send(self, message):
+        pass
+
+    def process_records(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.host, self.port))
-        sock.sendall(message)
+        sock.sendall('gen')
+        # data = tuple(sock.recv(1024).split('~'))
+        state = ''
+        while True:
+            data = tuple(sock.recv(1024).split('~'))
+            print data
+            if not data[0]:
+                break
+            elif data[0] == 'state':
+                state = data[1]
+                if state == 'SUCCESS':
+                    self.get_btn['state'] = 'active'
+                    self.gen_btn['text'] = (
+                        u'Сгенерировать список записей (Готово)')
+                    sock.sendall('ok')
+                elif state != 'SUCCESS':
+                    self.gen_btn['text'] = (
+                        u'Сгенерировать список записей (Запрос обрабатывается)')
+                    print 'sending state request'
+                    sock.sendall('state?')
+            elif state != 'SUCCESS':
+                print 'sending state request'
+                sock.sendall('state?')
+            elif self.records_requested_flag:
+                print 'sending get signal'
+                sock.sendall('get')
+                self.records_requested_flag = False
+            elif data[0] == 'begin':
+                data = tuple(sock.recv(1024).split('~'))
+                print data
+                while data[0] != 'end':
+                    self.results.append(data[0])
+                    sock.sendall('ok')
+                else:
+                    print(self.results)
+            else:
+                sock.sendall('ok')
+
+
         sock.close()
 
     def request_records(self, event):
-        self.send('gen')
+        if self.gen_btn['state'] == 'active':
+            thread.start_new_thread(self.process_records, tuple())
+            self.gen_btn['state'] = 'disabled'
 
     def receive_records(self, event):
-        self.send('get')
+        if self.get_btn['state'] == 'active':
+            self.records_requested_flag = True
+            self.get_btn['state'] = 'disabled'
 
     def send_data(self):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((self.host, self.port))
+
         connector = '~'
         message = connector.join([field.get() for field in
             [self.lastname, self.firstname, self.middlename, self.birth_date]])
-        self.send('add{}{}'.format(connector, message))
-        self.form.destroy()
+        sock.sendall('add{}{}'.format(connector, message))
+        sock.close()
 
+        self.form.destroy()
 
 if __name__ == '__main__':
     client = Client()

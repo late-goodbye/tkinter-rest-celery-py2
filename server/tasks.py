@@ -3,7 +3,7 @@ from database_handler import DatabaseHandler
 from time import sleep
 
 
-app = Celery('tasks', broker='amqp://localhost//')
+app = Celery('tasks', backend='amqp', broker='amqp://localhost//')
 dh = DatabaseHandler()
 
 @app.task
@@ -12,6 +12,7 @@ def add_person(person_info):
     sleep(5)
     dh.add_person(person_info)
     print 'Finish writing person data'
+    return True
 
 @app.task
 def generate_records(addr):
@@ -23,3 +24,4 @@ def generate_records(addr):
             print 'Record: {}'.format(record)
             file.write('{} {} {} {}\n'.format(*record))
     print 'Finish generating records'
+    return True
