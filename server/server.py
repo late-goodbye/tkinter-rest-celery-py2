@@ -20,10 +20,10 @@ class Server(object):
             print 'Connected by {}'.format(addr)
             self.data = tuple(conn.recv(1024).split('~'))
             if self.data[0] == 'add':
-                add_person(self.data[1:])
+                add_person.delay(self.data[1:])
             elif self.data[0] == 'gen':
                 print 'Put generate records task to query'
-                records = generate_records()
+                records = generate_records.delay()
             elif self.data[0] == 'get':
                 # self.return_records()
                 print 'Return records'
