@@ -10,12 +10,16 @@ dh = DatabaseHandler()
 def add_person(person_info):
     print 'Start writing person info into the database'
     sleep(5)
-    # return dh.add_person(person_info)
+    dh.add_person(person_info)
     print 'Finish writing person data'
 
 @app.task
 def generate_records():
     print 'Start generating records'
     sleep(10)
-    # return dh.generate_records()
+    with open('records.txt', 'w') as file:
+        records = dh.generate_records()
+        for record in records:
+            print 'Record: {}'.format(record)
+            file.write('{} {} {} {}'.format(*record))
     print 'Finish generating records'
