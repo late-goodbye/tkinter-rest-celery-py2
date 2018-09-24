@@ -14,12 +14,12 @@ def add_person(person_info):
     print 'Finish writing person data'
 
 @app.task
-def generate_records():
+def generate_records(addr):
     print 'Start generating records'
     sleep(10)
-    with open('records.txt', 'w') as file:
+    with open('records-{}-{}.txt'.format(*addr), 'w') as file:
         records = dh.generate_records()
         for record in records:
             print 'Record: {}'.format(record)
-            file.write('{} {} {} {}'.format(*record))
+            file.write('{} {} {} {}\n'.format(*record))
     print 'Finish generating records'
