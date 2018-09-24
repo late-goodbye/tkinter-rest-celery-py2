@@ -8,12 +8,14 @@ dh = DatabaseHandler()
 
 @app.task
 def add_person(person_info):
-    print 'Add person'
+    print 'Start writing person info into the database'
+    sleep(5)
     # return dh.add_person(person_info)
+    print 'Finish writing person data'
 
 @app.task
 def generate_records():
     print 'Start generating records'
     sleep(10)
-    print 'Finish generating records'
     # return dh.generate_records()
+    print 'Finish generating records'
