@@ -146,6 +146,7 @@ class Client(object):
                     data = sock.recv(1024)
                 except socket.error, e:
                     self.log('Error receiving data', e)
+                records = ''
                 while data:
                     records += data
                     try:
