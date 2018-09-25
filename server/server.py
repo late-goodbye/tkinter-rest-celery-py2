@@ -29,25 +29,21 @@ class Server(object):
                 if not self.data[0]:
                     break
                 elif self.data[0] == 'state?':
-                    if records:
-                        state = records.state
+                    if task:
+                        state = task.state
                     else:
                         state = 'Not started'
                     conn.sendall('~'.join(['state', state]))
                 elif self.data[0] == 'gen':
-                    if not os.path.isfile(
-                        'records-{}-{}'.format(addr[0], addr[1])):
-                        print 'Put generate records task to query'
-                        conn.sendall('ok')
-                        records = generate_records.delay(addr)
-                        print records.ready()
-                        print records.state
-                    else:
-                        conn.sendall('ok')
-                        print 'Already generated'
+                    print 'Put generate records task to query'
+                    conn.sendall('ok')
+                    task = generate_records.delay(addr)
+                    print task.ready()
+                    print task.state
                 elif self.data[0] == 'get':
-                    if os.path.isfile(
-                        'records-{}-{}.txt'.format(addr[0], addr[1])):
+                    if os.path.isfile(os.path.join(
+                        os.getcwd(),
+                        'records-{}-{}.txt'.format(addr[0], addr[1]))):
                         conn.send('rec')
                         response = conn.recv(10)
                         if response == 'go':
