@@ -10,3 +10,15 @@
 2018-09-25 16:50:07 -- Connection error, [Errno 111] Connection refused
 2018-09-25 16:50:21 -- Connection error, [Errno 111] Connection refused
 2018-09-25 16:50:34 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 17:28:36 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:13:29 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:14:01 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:15:40 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:15:40 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:21:16 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:21:50 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:23:27 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:28:41 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:29:03 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:29:47 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 18:30:59 -- Error receiving data, [Errno 104] Connection reset by peer
