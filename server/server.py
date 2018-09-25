@@ -49,14 +49,17 @@ class Server(object):
                 elif self.data[0] == 'get':
                     if os.path.isfile('records-{}-{}.txt'.format(addr[0], addr[1])):
                         # self.return_records()
-                        conn.sendall('begin')
-                        with open(
-                            'records-{}-{}.txt'.format(addr[0], addr[1]), 'r'
-                        ) as records_file:
-                            for line in records_file.readlines():
-                                conn.send(line.strip())
-                                response = conn.recv(1024)
-                            conn.send('end')
+                        conn.send('rec')
+                        response = conn.recv(10)
+                        if response == 'go':
+                            with open(
+                                'records-{}-{}.txt'.format(addr[0], addr[1]), 'r'
+                            ) as records_file:
+                                for line in records_file:
+                                    print line
+                                    conn.send(line)
+                                print 'Bye, {}:{}'.format(addr[0], addr[1])
+                                break
                     else:
                         print 'The records are not generated yet'
                         print 'records-{}-{}.txt'.format(addr[0], addr[1])

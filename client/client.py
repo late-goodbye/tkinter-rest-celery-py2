@@ -14,7 +14,6 @@ class Client(object):
         self.records_requested_flag = False
         self.records_generated_flag = False
         self.records_request_sent_flag = False
-        self.results = []
 
         self.root = Tkinter.Tk()
 
@@ -106,14 +105,17 @@ class Client(object):
                 print 'sending get signal'
                 sock.sendall('get')
                 self.records_requested_flag = False
-            elif data[0] == 'begin':
-                data = tuple(sock.recv(1024).split('~'))
-                print data
-                while data[0] != 'end':
-                    self.results.append(data[0])
-                    sock.sendall('ok')
-                else:
-                    print(self.results)
+            elif data[0] == 'rec':
+                sock.send('go')
+                with open('records.txt', 'w') as records:
+                    data = sock.recv(1024)
+                    # print data
+                    while data:
+                        records.write(data)
+                        data = sock.recv(1024)
+                    else:
+                        print 'Bye, {}:{}'.format(self.host, self.port)
+                        break
             else:
                 sock.sendall('ok')
 
