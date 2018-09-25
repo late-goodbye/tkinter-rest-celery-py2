@@ -29,6 +29,7 @@ class Server(object):
         If the message consists of several words the words divided by a '~' char.
         The first word of the message is a command.
         If message contains new record then it starts with 'add' command
+        This command executes in short way without infinite loop
 
         'gen' command starts records file generation task with celery.
         If the task started the client sends request for task status
