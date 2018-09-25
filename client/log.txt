@@ -1,0 +1,12 @@
+2018-09-25 16:36:50 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:36:57 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:37:52 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:40:03 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:40:15 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-25 16:41:55 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:43:26 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:47:36 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:48:43 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:50:07 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:50:21 -- Connection error, [Errno 111] Connection refused
+2018-09-25 16:50:34 -- Error receiving data, [Errno 104] Connection reset by peer

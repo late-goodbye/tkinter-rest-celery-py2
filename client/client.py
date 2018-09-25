@@ -1,8 +1,11 @@
 # coding=utf8
 import Tkinter
+from Tkinter import END
 import socket
+import sys
 import thread
 from time import sleep
+import datetime
 
 
 class Client(object):
@@ -77,13 +80,29 @@ class Client(object):
         pass
 
     def process_records(self):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((self.host, self.port))
-        sock.sendall('gen')
-        # data = tuple(sock.recv(1024).split('~'))
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        except socket.error, e:
+            self.log('Error creating socket', e)
+
+        try:
+            sock.connect((self.host, self.port))
+        except socket.gaierror, e:
+            self.log('Address-related error connecting to server', e)
+        except socket.error, e:
+            self.log('Connection error', e)
+
+        try:
+            sock.sendall('gen')
+        except socket.error, e:
+            self.log('Error sending data', e)
+
         state = ''
         while True:
-            data = tuple(sock.recv(1024).split('~'))
+            try:
+                data = tuple(sock.recv(1024).split('~'))
+            except socket.error, e:
+                self.log('Error receiving data', e)
             print data
             if not data[0]:
                 break
@@ -94,35 +113,57 @@ class Client(object):
                     self.gen_btn['state'] = 'active'
                     self.gen_btn['text'] = (
                         u'Сгенерировать список записей (Готово)')
-                    sock.sendall('ok')
+                    try:
+                        sock.sendall('ok')
+                    except socket.error, e:
+                        self.log('Error sending data', e)
                 elif state != 'SUCCESS':
                     self.gen_btn['text'] = (
                         u'Сгенерировать список записей (Запрос обрабатывается)')
                     print 'sending state request'
-                    sock.sendall('state?')
+                    try:
+                        sock.sendall('state?')
+                    except socket.error, e:
+                        self.log('Error sending data', e)
             elif state != 'SUCCESS':
                 print 'sending state request'
-                sock.sendall('state?')
+                try:
+                    sock.sendall('state?')
+                except socket.error, e:
+                    self.log('Error sending data', e)
             elif self.records_requested_flag:
                 print 'sending get signal'
-                sock.sendall('get')
+                try:
+                    sock.sendall('get')
+                except socket.error, e:
+                    self.log('Error sending data', e)
                 self.records_requested_flag = False
             elif data[0] == 'rec':
-                sock.send('go')
-                # with open('records.txt', 'w') as records:
-                data = sock.recv(1024)
-                # print data
+                try:
+                    sock.send('go')
+                except socket.error, e:
+                    self.log('Error sending data', e)
+                try:
+                    data = sock.recv(1024)
+                except socket.error, e:
+                    self.log('Error receiving data', e)
                 records = ''
                 while data:
                     records += data
-                    data = sock.recv(1024)
+                    try:
+                        data = sock.recv(1024)
+                    except socket.error, e:
+                        self.log('Error receiving data', e)
                 else:
                     records = records.strip().split('\n')
                     print records
                     print 'Bye, {}:{}'.format(self.host, self.port)
                     break
             else:
-                sock.sendall('ok')
+                try:
+                    sock.sendall('ok')
+                except socket.error, e:
+                    self.log('Error sending data', e)
         sock.close()
         self.show_records(records)
 
@@ -162,6 +203,44 @@ class Client(object):
         sock.close()
 
         self.form.destroy()
+
+    def log(self, desc, e):
+        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        message = '{} -- {}, {}'.format(time, desc, e)
+        with open('log.txt', 'a') as log:
+            log.write('{}\n'.format(message))
+        self.reset_gui()
+        self.show_error(message)
+        sys.exit(1)
+
+    def show_error(self, message):
+        self.error_window = Tkinter.Toplevel()
+        self.text_box = Tkinter.Text(self.error_window, wrap='word')
+        self.text_box.insert('end', message)
+        self.text_box['state'] = 'disabled'
+        self.text_box.pack(side='left')
+
+        self.scrollbar = Tkinter.Scrollbar(self.error_window)
+        self.scrollbar.pack(side='right')
+        self.scrollbar['command'] = self.text_box.yview
+        self.text_box['yscrollcommand'] = self.scrollbar.set
+
+        self.log_btn = Tkinter.Button(self.error_window, text=u'Вывести логи')
+        self.log_btn.bind('<Button-1>', self.load_logs)
+        self.log_btn.pack(side='bottom')
+
+    def load_logs(self, event):
+        self.text_box['state'] = 'normal'
+        self.text_box.delete('1.0', END)
+        with open('log.txt', 'r') as log:
+            for record in log:
+                self.text_box.insert('end', record)
+        self.text_box['state'] = 'disabled'
+
+    def reset_gui(self):
+        self.gen_btn['text'] = u'Сгенерировать список записей'
+        self.get_btn['state'] = 'disabled'
+        self.gen_btn['state'] = 'active'
 
 if __name__ == '__main__':
     client = Client()
