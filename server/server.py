@@ -69,6 +69,7 @@ class Server(object):
                 sleep(1)
                 self.data = tuple(conn.recv(1024).split('~'))
                 # print 'Received: {}'.format(self.data)
+        os.remove('records-{}-{}.txt'.format(addr[0], addr[1]))
         print 'Bye, {}:{}'.format(addr[0], addr[1])
         conn.close()
 

@@ -91,6 +91,7 @@ class Client(object):
                 state = data[1]
                 if state == 'SUCCESS':
                     self.get_btn['state'] = 'active'
+                    self.gen_btn['state'] = 'active'
                     self.gen_btn['text'] = (
                         u'Сгенерировать список записей (Готово)')
                     sock.sendall('ok')
@@ -111,19 +112,34 @@ class Client(object):
                 # with open('records.txt', 'w') as records:
                 data = sock.recv(1024)
                 # print data
+                records = ''
                 while data:
-                    self.records += data
+                    records += data
                     data = sock.recv(1024)
                 else:
-                    self.records_list = self.records.strip().split('\n')
-                    print self.records_list
+                    records = records.strip().split('\n')
+                    print records
                     print 'Bye, {}:{}'.format(self.host, self.port)
                     break
             else:
                 sock.sendall('ok')
-
-
         sock.close()
+        self.show_records(records)
+
+    def show_records(self, records):
+        records_window = Tkinter.Toplevel()
+        text_box = Tkinter.Text(records_window, wrap='word')
+        scrollbar = Tkinter.Scrollbar(records_window)
+
+        scrollbar['command'] = text_box.yview
+        text_box['yscrollcommand'] = scrollbar.set
+
+        text_box.pack(side='left')
+        scrollbar.pack(side='right')
+        for record in records:
+            text_box.insert('end', '{}\n'.format(record))
+        text_box['state'] = 'disabled'
+        self.gen_btn['text'] = u'Сгенерировать список записей'
 
     def request_records(self, event):
         if self.gen_btn['state'] == 'active':
