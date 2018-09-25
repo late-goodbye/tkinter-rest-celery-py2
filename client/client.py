@@ -17,7 +17,6 @@ class Client(object):
         self.records_requested_flag = False
         self.records_generated_flag = False
         self.records_request_sent_flag = False
-        self.records = ''
 
         self.root = Tkinter.Tk()
 
@@ -147,7 +146,6 @@ class Client(object):
                     data = sock.recv(1024)
                 except socket.error, e:
                     self.log('Error receiving data', e)
-                records = ''
                 while data:
                     records += data
                     try:
@@ -165,7 +163,8 @@ class Client(object):
                 except socket.error, e:
                     self.log('Error sending data', e)
         sock.close()
-        self.show_records(records)
+        if records:
+            self.show_records(records)
 
     def show_records(self, records):
         records_window = Tkinter.Toplevel()
