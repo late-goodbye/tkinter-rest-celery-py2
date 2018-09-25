@@ -4,7 +4,7 @@ from random import randint
 
 
 class DatabaseHandler(object):
-    """docstring for DatabaseHandler."""
+    """ Class for communication with sqlite3 database """
     def __init__(self, db_name='persons'):
         super(DatabaseHandler, self).__init__()
         self.db_name = db_name
@@ -37,6 +37,7 @@ class DatabaseHandler(object):
         return self.cursor.fetchall()
 
     def fill_database(self, n):
+        """ Uses 'names' module to generate n random records for the database """ 
         for i in xrange(n):
             lastname = names.get_last_name()
             firstname = names.get_first_name()
