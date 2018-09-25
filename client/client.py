@@ -9,14 +9,25 @@ import datetime
 
 
 class Client(object):
-    """docstring for Client."""
+    """
+    Client is independent class working in infinite loop with gui.
+    During an instance initiation host and port have to be defined.
+    The default values are 'localhost' and 9000
+    Main window contains three buttons
+
+    To prevent a user from wrong actions the buttons may be activated and
+    deactivated.
+
+    The app contains three additional windows:
+    * adding record to specify new record's information
+    * watch records received from a server
+    * watch error has been occured
+    """
     def __init__(self, host='localhost', port=9000):
         super(Client, self).__init__()
         self.host = host
         self.port = port
         self.records_requested_flag = False
-        self.records_generated_flag = False
-        self.records_request_sent_flag = False
 
         self.root = Tkinter.Tk()
 
@@ -46,6 +57,13 @@ class Client(object):
         self.get_btn.pack()
 
     def open_form(self, event):
+        """
+        Window for adding new record
+        After form filled and Save button pushed a thread with new connection
+        will be created to send data on the server. Server will close this
+        connection then the data received
+        The cancel button just destroys the window without any changes
+        """
         self.form = Tkinter.Tk()
         Tkinter.Label(self.form, text=u'Фамилия').grid(row=0, column=0)
         Tkinter.Label(self.form, text=u'Имя').grid(row=1, column=0)
@@ -73,12 +91,17 @@ class Client(object):
         self.cancel_btn.grid(row=5, column=1)
 
     def run(self):
+        """ The entry point """
         self.root.mainloop()
 
-    def send(self, message):
-        pass
-
     def process_records(self):
+        """
+        The main work infinte loop for generation and receiving records
+        These functions performed by transfering short messages to and from
+        the server
+        To control current state the variable records_requested_flag is used
+        Then it's value becomes True get request will be sent to server
+        """
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except socket.error, e:
@@ -168,6 +191,7 @@ class Client(object):
             self.show_records(records)
 
     def show_records(self, records):
+        """ Shows records from list on new window """
         records_window = Tkinter.Toplevel()
         text_box = Tkinter.Text(records_window, wrap='word')
         scrollbar = Tkinter.Scrollbar(records_window)
@@ -183,16 +207,19 @@ class Client(object):
         self.gen_btn['text'] = u'Сгенерировать список записей'
 
     def request_records(self, event):
+        """ Starts new thread for records transfering and controls buttons """
         if self.gen_btn['state'] == 'active':
             thread.start_new_thread(self.process_records, tuple())
             self.gen_btn['state'] = 'disabled'
 
     def receive_records(self, event):
+        """ Changes the flag to sent request for records list """
         if self.get_btn['state'] == 'active':
             self.records_requested_flag = True
             self.get_btn['state'] = 'disabled'
 
     def send_data(self):
+        """ Creates short connection to send new record on server """
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.host, self.port))
 
@@ -205,6 +232,7 @@ class Client(object):
         self.form.destroy()
 
     def log(self, desc, e):
+        """ If an exception catched adds information into log file and resets gui"""
         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         message = '{} -- {}, {}'.format(time, desc, e)
         with open('log.txt', 'a') as log:
@@ -214,6 +242,10 @@ class Client(object):
         sys.exit(1)
 
     def show_error(self, message):
+        """
+        Shows last exception in new window
+        If logs requested by pressing a button, shows all catched exceptions
+        """
         self.error_window = Tkinter.Toplevel()
         self.text_box = Tkinter.Text(self.error_window, wrap='word')
         self.text_box.insert('end', message)
@@ -230,6 +262,7 @@ class Client(object):
         self.log_btn.pack(side='bottom')
 
     def load_logs(self, event):
+        """ Clears text box in log window and fills it with all logs """
         self.text_box['state'] = 'normal'
         self.text_box.delete('1.0', END)
         with open('log.txt', 'r') as log:
@@ -238,6 +271,7 @@ class Client(object):
         self.text_box['state'] = 'disabled'
 
     def reset_gui(self):
+        """ Set main menu buttons into default state """
         self.gen_btn['text'] = u'Сгенерировать список записей'
         self.get_btn['state'] = 'disabled'
         self.gen_btn['state'] = 'active'
