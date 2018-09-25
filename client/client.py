@@ -220,15 +220,28 @@ class Client(object):
 
     def send_data(self):
         """ Creates short connection to send new record on server """
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((self.host, self.port))
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        except socket.error, e:
+            self.log('Error creating socket', e)
+
+        try:
+            sock.connect((self.host, self.port))
+        except socket.gaierror, e:
+            self.log('Address-related error connecting to server', e)
+        except socket.error, e:
+            self.log('Connection error', e)
 
         connector = '~'
         message = connector.join([field.get() for field in
             [self.lastname, self.firstname, self.middlename, self.birth_date]])
-        sock.sendall('add{}{}'.format(connector, message))
-        sock.close()
 
+        try:
+            sock.sendall('add{}{}'.format(connector, message))
+        except socket.error, e:
+            self.log('Error sending data', e)
+        
+        sock.close()
         self.form.destroy()
 
     def log(self, desc, e):
