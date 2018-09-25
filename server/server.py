@@ -47,7 +47,8 @@ class Server(object):
                         conn.sendall('ok')
                         print 'Already generated'
                 elif self.data[0] == 'get':
-                    if os.path.isfile('records-{}-{}.txt'.format(addr[0], addr[1])):
+                    if os.path.isfile(
+                        'records-{}-{}.txt'.format(addr[0], addr[1])):
                         # self.return_records()
                         conn.send('rec')
                         response = conn.recv(10)
@@ -58,7 +59,6 @@ class Server(object):
                                 for line in records_file:
                                     print line
                                     conn.send(line)
-                                print 'Bye, {}:{}'.format(addr[0], addr[1])
                                 break
                     else:
                         print 'The records are not generated yet'
@@ -69,6 +69,7 @@ class Server(object):
                 sleep(1)
                 self.data = tuple(conn.recv(1024).split('~'))
                 # print 'Received: {}'.format(self.data)
+        print 'Bye, {}:{}'.format(addr[0], addr[1])
         conn.close()
 
     def run(self):
