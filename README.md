@@ -12,10 +12,10 @@ The app depends on the next packages:
 
 * names
 * celery
-* rabbitmq
+* RabbitMQ
 * Tkinter
 
-The first one and the second one may be installed by bash (check in Ubuntu-18.04-based OS):
+The first one and the second one may be installed by bash (checked for Ubuntu-18.04-based OS):
 
 ```bash
 pip install -r requirements.txt --user
@@ -24,7 +24,7 @@ pip install -r requirements.txt --user
 The RabbitMQ may be installed by the next way according to [Tests4geeks Blog](https://tests4geeks.com/python-celery-rabbitmq-tutorial/).
 
 ```bash
-apt-get install rabbitmq-server
+$ apt-get install rabbitmq-server
 # add user 'jimmy' with password 'jimmy123'
 $ rabbitmqctl add_user jimmy jimmy123
 # add virtual host 'jimmy_vhost'
@@ -38,7 +38,7 @@ $ rabbitmqctl set_permissions -p jimmy_vhost jimmy ".*" ".*" ".*"
 The Tkinter may be installed by:
 
 ```bash
-apt-get install python-tk
+$ apt-get install python-tk
 ```
 
 # Run
