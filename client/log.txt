@@ -22,3 +22,5 @@
 2018-09-25 18:29:03 -- Error receiving data, [Errno 104] Connection reset by peer
 2018-09-25 18:29:47 -- Error receiving data, [Errno 104] Connection reset by peer
 2018-09-25 18:30:59 -- Error receiving data, [Errno 104] Connection reset by peer
+2018-09-28 09:59:14 -- Connection error, [Errno 111] Connection refused
+2018-09-28 09:59:19 -- Connection error, [Errno 111] Connection refused
