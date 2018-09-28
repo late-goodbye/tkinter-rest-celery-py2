@@ -52,7 +52,7 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
         pass
 
     def handle_unknown(self):
-        pass
+        raise RuntimeError('Can not recognize received command')
 
 def clear_directory():
     """
