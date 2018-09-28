@@ -18,7 +18,10 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
             filename = self.handle_gen()
             self.wfile.write(filename)
         elif self.data[0] == 'get':
-            self.handle_get()
+            try:
+                self.handle_get(self.data[1])
+            except IndexError:
+                print 'No filename in get request'
         else:
             self.handle_unknown()
 
@@ -46,7 +49,7 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
         else:
             return '0'
 
-    def handle_get(self):
+    def handle_get(self, filename):
         pass
 
     def handle_unknown(self):
@@ -58,10 +61,10 @@ def clear_directory():
     These files produced by previous runs and not deleted during error
     occured
     """
-    print 'Clearing records dir'
     records_directory = os.path.join(os.getcwd(), 'records')
     if os.path.isdir(records_directory):
         rmtree(records_directory)
+        print 'Records cleared'
     os.mkdir(records_directory)
 
 
