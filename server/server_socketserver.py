@@ -11,7 +11,6 @@ import hashlib
 class CustomTCPHandler(SocketServer.StreamRequestHandler):
     def handle(self):
         self.data = tuple(self.rfile.readline().strip().split('~'))
-
         if self.data[0] == 'add':
             self.wfile.write(1 if self.handle_add() else 0)
         elif self.data[0] == 'gen':

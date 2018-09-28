@@ -12,6 +12,7 @@ class Client(object):
         self.port = port
 
         self.connector = '~'
+        self.records_filename = ''
 
         self.create_main_window()
 
@@ -105,6 +106,17 @@ class Client(object):
 
     def request_records(self, event):
         self.connect_to_server()
+        try:
+            self.sock.sendall('gen\n')
+        except socket.error, e:
+            self.log('Error sending data', e)
+
+        try:
+            self.records_filename = self.sock.recv(1024)
+        except socket.error, e:
+            self.log('Error receiving data', e)
+
+        print 'Records filename: {}'.format(self.records_filename)
 
 
     def receive_records(self, event):
@@ -123,7 +135,7 @@ class Client(object):
 
 
     def log(self, desc, e):
-        """ If an exception catched adds information into log file """
+        """ Adds information into log file in case of exception catched """
         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         message = '{} -- {}, {}'.format(time, desc, e)
         with open('log.txt', 'a') as log:
