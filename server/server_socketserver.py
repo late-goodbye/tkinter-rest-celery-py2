@@ -3,6 +3,8 @@ from database_handler import DatabaseHandler
 from tasks import add_person, generate_records
 import os
 import sys
+from time import ctime
+import hashlib
 
 
 class CustomTCPHandler(SocketServer.StreamRequestHandler):
@@ -10,19 +12,34 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
         self.data = tuple(self.rfile.readline().strip().split('~'))
 
         if self.data[0] == 'add':
-            self.handle_add()
+            self.wfile.write(1 if self.handle_add() else 0)
         elif self.data[0] == 'gen':
-            self.handle_gen()
+            self.wfile.write(self.handle_gen())
         elif self.data[0] == 'get':
             self.handle_get()
         else:
             self.handle_unknown()
 
     def handle_add(self):
-        add_person.delay(self.data[1:])
+        try:
+            return add_person.delay(self.data[1:])
+        except Exception as e:
+            raise 'Error add record to database: {}'.format(e)
+        else:
+            return False
 
     def handle_gen(self):
-        pass
+        h = hashlib.md5()
+        h.update(ctime())
+        h.update(''.join(str(self.request.getpeername())))
+        filename = h.hexdigest()
+        print filename
+        try:
+            # generate_records(filename = 'dsfdsd')
+        except Exception as e:
+            raise e
+        else:
+            return '0'
 
     def handle_get(self):
         pass
