@@ -68,7 +68,7 @@ class Client(object):
             self.form, text=u'Отмена', command=self.form.destroy)
         self.cancel_btn.grid(row=5, column=1)
 
-    def connect_with_server(self):
+    def connect_to_server(self):
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except socket.error, e:
@@ -82,7 +82,7 @@ class Client(object):
             self.log('Connection error', e)
 
     def send_person_data(self):
-        self.connect_with_server()
+        self.connect_to_server()
         message = self.connector.join([field.get() for field in
             [self.lastname, self.firstname, self.middlename, self.birth_date]])
         self.form.destroy()
@@ -104,7 +104,8 @@ class Client(object):
             self.show_add_person_result(success=res)
 
     def request_records(self, event):
-        pass
+        self.connect_to_server()
+
 
     def receive_records(self, event):
         pass
