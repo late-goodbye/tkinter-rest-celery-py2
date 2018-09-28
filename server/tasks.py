@@ -8,18 +8,16 @@ dh = DatabaseHandler()
 
 @app.task
 def add_person(person_info):
-    """ Add person task with imitation of long-term hard task """
+    """ Add person task """
     print 'Start writing person info into the database'
-    sleep(5)
     dh.add_person(person_info)
     print 'Finish writing person data'
     return True
 
 @app.task
 def generate_records(addr):
-    """ Generation records txt file task with imitation of long-term hard task """
+    """ Generation records txt file task """
     print 'Start generating records'
-    sleep(10)
     with open('records-{}-{}.txt'.format(*addr), 'w') as file:
         records = dh.generate_records()
         for record in records:
