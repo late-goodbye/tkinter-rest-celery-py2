@@ -1,6 +1,5 @@
 from celery import Celery
 from database_handler import DatabaseHandler
-from time import sleep
 
 
 app = Celery('tasks', backend='amqp', broker='amqp://localhost//')
