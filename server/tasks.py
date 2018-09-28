@@ -14,10 +14,11 @@ def add_person(person_info):
     return True
 
 @app.task
-def generate_records(addr):
+def generate_records(filename):
     """ Generation records txt file task """
     print 'Start generating records'
-    with open('records-{}-{}.txt'.format(*addr), 'w') as file:
+    print '{}.txt'.format(filename)
+    with open('{}.txt'.format(filename), 'w') as file:
         records = dh.generate_records()
         for record in records:
             print 'Record: {}'.format(record)

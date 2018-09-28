@@ -4,6 +4,7 @@ from tasks import add_person, generate_records
 import os
 import sys
 from time import ctime
+from shutil import rmtree
 import hashlib
 
 
@@ -14,7 +15,8 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
         if self.data[0] == 'add':
             self.wfile.write(1 if self.handle_add() else 0)
         elif self.data[0] == 'gen':
-            self.wfile.write(self.handle_gen())
+            filename = self.handle_gen()
+            self.wfile.write(filename)
         elif self.data[0] == 'get':
             self.handle_get()
         else:
@@ -35,7 +37,10 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
         filename = h.hexdigest()
         print filename
         try:
-            # generate_records(filename = 'dsfdsd')
+            filepath = os.path.join(
+                os.path.join(os.getcwd(), 'records'), filename)
+            generate_records(filepath)
+            return filename
         except Exception as e:
             raise e
         else:
@@ -47,26 +52,23 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
     def handle_unknown(self):
         pass
 
-
-class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
-    pass
-
 def clear_directory():
     """
     Remove outdated records text files if they exist
     These files produced by previous runs and not deleted during error
     occured
     """
-    files = os.listdir(os.getcwd())
-    for file in files:
-        if 'records-' in file and '.txt' in file:
-            os.remove(os.path.join(os.getcwd(), file))
+    print 'Clearing records dir'
+    records_directory = os.path.join(os.getcwd(), 'records')
+    if os.path.isdir(records_directory):
+        rmtree(records_directory)
+    os.mkdir(records_directory)
 
 
 if __name__ == '__main__':
     clear_directory()
 
     host, port = 'localhost', 9000
-    server = ThreadedTCPServer((host, port), CustomTCPHandler)
+    server = SocketServer.TCPServer((host, port), CustomTCPHandler)
     server.serve_forever()
     server.allow_reuse_address = True
