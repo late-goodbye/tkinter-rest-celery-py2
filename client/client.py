@@ -140,33 +140,42 @@ class Client(object):
             print 'Records filename: {}'.format(self.records_filename)
 
     def receive_records(self):
-        self.connect_to_server()
+        if self.connect_to_server():
 
-        try:
-            self.sock.sendall(
-                'get{}{}\n'.format(self.connector, self.records_filename))
-            print 'Send: get{}{}'.format(self.connector, self.records_filename)
-        except socket.error, e:
-            self.log('Error sending data', e)
+            try:
+                self.sock.sendall(
+                    'get{}{}\n'.format(self.connector, self.records_filename))
+                print 'Send: get{}{}'.format(self.connector, self.records_filename)
+            except socket.error, e:
+                self.log('Error sending data', e)
+                self.sock.close()
+                return
 
-        try:
-            records = ''
-            while True:
-                data = self.sock.recv(1024)
-                if data:
-                    records += data
+            try:
+                records = ''
+                while True:
+                    data = self.sock.recv(1024)
+                    if data:
+                        records += data
+                    else:
+                        break
                 else:
-                    break
-        except socket.error, e:
-            self.log('Error while receiving records', e)
-        print records
-        try:
-            if records[0] == '~':
-                self.log('File not found: probably it has been removed', '')
-        except IndexError:
-            self.log('Blank string received')
-        self.show_records(records)
-        self.sock.close()
+                    self.sock.close()
+            except socket.error, e:
+                self.log('Error while receiving records', e)
+                self.sock.close()
+                return
+
+            print records
+            try:
+                if records[0] == '~':
+                    self.log('File not found: probably it has been removed', '')
+            except IndexError:
+                self.log('Blank string received')
+                self.sock.close()
+                return
+
+            self.show_records(records)
 
     def show_records(self, records):
         """ Shows records from list on new window """
