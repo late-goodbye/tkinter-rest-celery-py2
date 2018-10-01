@@ -32,7 +32,6 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
             return False
             raise 'Error add record to database: {}'.format(e)
 
-
     def handle_gen(self):
         h = hashlib.md5()
         h.update(ctime())

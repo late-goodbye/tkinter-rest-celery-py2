@@ -118,6 +118,9 @@ class Client(object):
         except socket.error, e:
             self.log('Error receiving data', e)
 
+        if self.records_filename == '0':
+            self.log('Error records file generation on the server side', '')
+
         self.sock.close()
         self.get_btn['state'] = 'active'
         print 'Records filename: {}'.format(self.records_filename)
