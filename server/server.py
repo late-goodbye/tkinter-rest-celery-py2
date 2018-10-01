@@ -10,6 +10,7 @@ import hashlib
 
 class CustomTCPHandler(SocketServer.StreamRequestHandler):
     def handle(self):
+        self.records_directory = os.path.join(os.getcwd(), 'records')
         self.data = tuple(self.rfile.readline().strip().split('~'))
         if self.data[0] == 'add':
             self.wfile.write(1 if self.handle_add() else 0)
@@ -28,9 +29,9 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
         try:
             return add_person.delay(self.data[1:])
         except Exception as e:
-            raise 'Error add record to database: {}'.format(e)
-        else:
             return False
+            raise 'Error add record to database: {}'.format(e)
+
 
     def handle_gen(self):
         h = hashlib.md5()
@@ -39,17 +40,25 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
         filename = h.hexdigest()
         print filename
         try:
-            filepath = os.path.join(
-                os.path.join(os.getcwd(), 'records'), filename)
+            filepath = os.path.join(self.records_directory, filename)
             generate_records(filepath)
             return filename
         except Exception as e:
-            raise e
-        else:
+            print e
             return '0'
 
     def handle_get(self, filename):
-        pass
+        print 'handle get with {} filename'.format(filename)
+        try:
+            with open(os.path.join(
+                self.records_directory, '{}.txt'.format(filename)), 'r') as records:
+                for record in records:
+                    self.wfile.write(record)
+                print 'end writing'
+        except socket.error, e:
+            print 'Records sending error: {}'.format(e)
+        except FileNotFoundError:
+            print 'File with records not found'
 
     def handle_unknown(self):
         raise RuntimeError('Can not recognize received command')
