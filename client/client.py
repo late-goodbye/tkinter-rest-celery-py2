@@ -33,6 +33,7 @@ class Client(object):
             self.root,
             text=u'Получить список записей',
             width=self.btn_width)
+        self.get_btn['state'] = 'disabled'
 
         self.add_btn.bind('<Button-1>', self.open_form)
         self.gen_btn.bind('<Button-1>', self.request_records)
@@ -106,6 +107,7 @@ class Client(object):
 
     def request_records(self, event):
         self.connect_to_server()
+
         try:
             self.sock.sendall('gen\n')
         except socket.error, e:
@@ -116,11 +118,46 @@ class Client(object):
         except socket.error, e:
             self.log('Error receiving data', e)
 
+        self.sock.close()
+        self.get_btn['state'] = 'active'
         print 'Records filename: {}'.format(self.records_filename)
 
-
     def receive_records(self, event):
-        pass
+        self.connect_to_server()
+
+        try:
+            self.sock.sendall(
+                'get{}{}\n'.format(self.connector, self.records_filename))
+            print 'Send: get{}{}'.format(self.connector, self.records_filename)
+        except socket.error, e:
+            self.log('Error sending data', e)
+
+        try:
+            records = ''
+            while True:
+                data = self.sock.recv(1024)
+                if data:
+                    records += data
+                else:
+                    break
+        except socket.error, e:
+            self.log('Error while receiving records', e)
+        self.show_records(records)
+        self.sock.close()
+
+    def show_records(self, records):
+        """ Shows records from list on new window """
+        records_window = Tkinter.Toplevel()
+        text_box = Tkinter.Text(records_window, wrap='word')
+        scrollbar = Tkinter.Scrollbar(records_window)
+
+        scrollbar['command'] = text_box.yview
+        text_box['yscrollcommand'] = scrollbar.set
+
+        text_box.pack(side='left')
+        scrollbar.pack(side='right')
+        text_box.insert('end', records)
+        text_box['state'] = 'disabled'
 
     def show_add_person_result(event, success):
         print success
@@ -132,7 +169,6 @@ class Client(object):
             result_window, text=u'OK', command=result_window.destroy)
         label.pack()
         ok_btn.pack()
-
 
     def log(self, desc, e):
         """ Adds information into log file in case of exception catched """
