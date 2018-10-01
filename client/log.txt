@@ -106,3 +106,6 @@
 2018-10-01 22:18:25 -- Connection error, [Errno 111] Connection refused
 2018-10-01 22:18:35 -- Connection error, [Errno 111] Connection refused
 2018-10-01 22:19:30 -- File not found: probably it has been removed, 
+2018-10-01 23:10:13 -- File not found: probably it has been removed, 
+2018-10-01 23:12:40 -- File not found: probably it has been removed, 
+2018-10-01 23:13:45 -- File not found: probably it has been removed, 

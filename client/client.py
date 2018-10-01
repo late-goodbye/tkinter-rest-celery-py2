@@ -169,13 +169,14 @@ class Client(object):
             print records
             try:
                 if records[0] == '~':
-                    self.log('File not found: probably it has been removed', '')
+                    self.log('File not found: probably it was removed', '')
+                    self.get_btn['state'] = 'disabled'
+                else:
+                    self.show_records(records)
             except IndexError:
                 self.log('Blank string received')
                 self.sock.close()
                 return
-
-            self.show_records(records)
 
     def show_records(self, records):
         """ Shows records from list on new window """
