@@ -23,28 +23,27 @@ class Client(object):
         self.gen_btn = Tkinter.Button(
             self.root,
             text=u'Сгенерировать список записей',
-            width=self.btn_width)
+            width=self.btn_width,
+            command=self.request_records)
 
         self.add_btn = Tkinter.Button(
             self.root,
             text=u'Добавить новую запись',
-            width=self.btn_width)
+            width=self.btn_width,
+            command=self.open_form)
 
         self.get_btn = Tkinter.Button(
             self.root,
             text=u'Получить список записей',
-            width=self.btn_width)
+            width=self.btn_width,
+            command=self.receive_records)
         self.get_btn['state'] = 'disabled'
-
-        self.add_btn.bind('<Button-1>', self.open_form)
-        self.gen_btn.bind('<Button-1>', self.request_records)
-        self.get_btn.bind('<Button-1>', self.receive_records)
 
         self.gen_btn.pack()
         self.add_btn.pack()
         self.get_btn.pack()
 
-    def open_form(self, event):
+    def open_form(self):
         self.form = Tkinter.Toplevel()
         Tkinter.Label(self.form, text=u'Фамилия').grid(row=0, column=0)
         Tkinter.Label(self.form, text=u'Имя').grid(row=1, column=0)
@@ -110,7 +109,7 @@ class Client(object):
             self.sock.close()
             self.show_add_person_result(success=res)
 
-    def request_records(self, event):
+    def request_records(self):
         if self.connect_to_server():
 
             try:
@@ -140,7 +139,7 @@ class Client(object):
             self.get_btn['state'] = 'active'
             print 'Records filename: {}'.format(self.records_filename)
 
-    def receive_records(self, event):
+    def receive_records(self):
         self.connect_to_server()
 
         try:

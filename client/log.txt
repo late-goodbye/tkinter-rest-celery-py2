@@ -103,3 +103,6 @@
 2018-10-01 22:04:41 -- Error records file generation on the server side, 
 2018-10-01 22:05:47 -- Error records file generation on the server side, 
 2018-10-01 22:07:41 -- Connection error, [Errno 111] Connection refused
+2018-10-01 22:18:25 -- Connection error, [Errno 111] Connection refused
+2018-10-01 22:18:35 -- Connection error, [Errno 111] Connection refused
+2018-10-01 22:19:30 -- File not found: probably it has been removed, 
