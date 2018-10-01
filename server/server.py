@@ -6,6 +6,7 @@ import sys
 from time import ctime
 from shutil import rmtree
 import hashlib
+import socket
 
 
 class CustomTCPHandler(SocketServer.StreamRequestHandler):
@@ -44,7 +45,7 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
             return filename
         except Exception as e:
             print e
-            return '0'
+            return 'X'
 
     def handle_get(self, filename):
         print 'handle get with {} filename'.format(filename)
@@ -56,8 +57,9 @@ class CustomTCPHandler(SocketServer.StreamRequestHandler):
                 print 'end writing'
         except socket.error, e:
             print 'Records sending error: {}'.format(e)
-        except FileNotFoundError:
+        except IOError:
             print 'File with records not found'
+            self.wfile.write('~')
 
     def handle_unknown(self):
         raise RuntimeError('Can not recognize received command')

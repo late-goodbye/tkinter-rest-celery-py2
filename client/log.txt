@@ -24,3 +24,82 @@
 2018-09-25 18:30:59 -- Error receiving data, [Errno 104] Connection reset by peer
 2018-09-28 09:59:14 -- Connection error, [Errno 111] Connection refused
 2018-09-28 09:59:19 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:01:29 -- File not found: probably is has been removed, 
+2018-10-01 20:03:49 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:05:13 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:06:14 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:08:31 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:11:54 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:15:03 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:15:38 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:19:52 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:20:19 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:22:57 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:26:04 -- Error records file generation on the server side, 
+2018-10-01 20:26:41 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:28:31 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:31:00 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:33:31 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:35:54 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:37:20 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:38:15 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:38:15 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:38:15 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:40:58 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:40:58 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:40:58 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:43:34 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:44:00 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:44:04 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:44:27 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:44:28 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:44:30 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:45:59 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:46:02 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:46:04 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:46:08 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:46:10 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:46:11 -- Error while receiving records, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:46:14 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:46:16 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:46:16 -- Error while receiving records, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:46:29 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:46:32 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:46:33 -- Error while receiving records, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:46:46 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:46:47 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:46:48 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:48:57 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:49:02 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:49:04 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:52:49 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:52:56 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:52:57 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:53:17 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:54:30 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:54:41 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:55:30 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:55:48 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:55:51 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:55:52 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:55:55 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:55:57 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:55:57 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:55:59 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:56:00 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:56:01 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:57:09 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:57:11 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:57:12 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:57:28 -- Connection error, [Errno 111] Connection refused
+2018-10-01 20:57:30 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 20:57:30 -- Error receiving data, [Errno 107] Transport endpoint is not connected
+2018-10-01 20:57:31 -- Blank string received, 
+2018-10-01 21:59:07 -- Connection error, [Errno 111] Connection refused
+2018-10-01 21:59:10 -- Error sending data, [Errno 32] Broken pipe
+2018-10-01 22:01:55 -- Connection error, [Errno 111] Connection refused
+2018-10-01 22:02:14 -- Connection error, [Errno 111] Connection refused
+2018-10-01 22:02:45 -- Error records file generation on the server side, 
+2018-10-01 22:04:41 -- Error records file generation on the server side, 
+2018-10-01 22:05:47 -- Error records file generation on the server side, 
+2018-10-01 22:07:41 -- Connection error, [Errno 111] Connection refused

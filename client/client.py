@@ -3,6 +3,7 @@ import Tkinter
 import socket
 import sys
 import datetime
+from time import sleep
 
 class Client(object):
     """docstring for Client."""
@@ -75,13 +76,17 @@ class Client(object):
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except socket.error, e:
             self.log('Error creating socket', e)
+            return False
 
         try:
             self.sock.connect((self.host, self.port))
+            return True
         except socket.gaierror, e:
             self.log('Address-related error connecting to server', e)
+            return False
         except socket.error, e:
             self.log('Connection error', e)
+            return False
 
     def send_person_data(self):
         self.connect_to_server()
@@ -106,24 +111,34 @@ class Client(object):
             self.show_add_person_result(success=res)
 
     def request_records(self, event):
-        self.connect_to_server()
+        if self.connect_to_server():
 
-        try:
-            self.sock.sendall('gen\n')
-        except socket.error, e:
-            self.log('Error sending data', e)
+            try:
+                self.sock.sendall('gen\n')
+            except socket.error, e:
+                self.log('Error sending data', e)
+                self.sock.close()
+                return
 
-        try:
-            self.records_filename = self.sock.recv(1024)
-        except socket.error, e:
-            self.log('Error receiving data', e)
+            try:
+                self.records_filename = self.sock.recv(1024)
+            except socket.error, e:
+                self.log('Error receiving data', e)
+                self.sock.close()
+                return
+            print self.records_filename
+            try:
+                if self.records_filename[0] == 'X':
+                    self.log('Error records file generation on the server side', '')
+                    self.sock.close()
+                    return
+            except IndexError:
+                self.log('Blank string received', '')
+                self.sock.close()
+                return
 
-        if self.records_filename == '0':
-            self.log('Error records file generation on the server side', '')
-
-        self.sock.close()
-        self.get_btn['state'] = 'active'
-        print 'Records filename: {}'.format(self.records_filename)
+            self.get_btn['state'] = 'active'
+            print 'Records filename: {}'.format(self.records_filename)
 
     def receive_records(self, event):
         self.connect_to_server()
@@ -145,6 +160,12 @@ class Client(object):
                     break
         except socket.error, e:
             self.log('Error while receiving records', e)
+        print records
+        try:
+            if records[0] == '~':
+                self.log('File not found: probably it has been removed', '')
+        except IndexError:
+            self.log('Blank string received')
         self.show_records(records)
         self.sock.close()
 
@@ -162,7 +183,7 @@ class Client(object):
         text_box.insert('end', records)
         text_box['state'] = 'disabled'
 
-    def show_add_person_result(event, success):
+    def show_add_person_result(self, success):
         print success
         result_window = Tkinter.Toplevel()
         label_text = u'Успешно' if success else u'Ошибка'
@@ -179,17 +200,17 @@ class Client(object):
         message = '{} -- {}, {}'.format(time, desc, e)
         with open('log.txt', 'a') as log:
             log.write('{}\n'.format(message))
+        print message
         self.show_error(message)
-        sys.exit(1)
 
     def load_logs(self, event):
         """ Clears text box in log window and fills it with all logs """
-        self.text_box['state'] = 'normal'
-        self.text_box.delete('1.0', Tkinter.END)
+        self.error_text_box['state'] = 'normal'
+        self.error_text_box.delete('1.0', Tkinter.END)
         with open('log.txt', 'r') as log:
             for record in log:
-                self.text_box.insert('end', record)
-        self.text_box['state'] = 'disabled'
+                self.error_text_box.insert('end', record)
+        self.error_text_box['state'] = 'disabled'
 
     def show_error(self, message):
         """
@@ -197,19 +218,24 @@ class Client(object):
         If logs requested by pressing a button, shows all catched exceptions
         """
         self.error_window = Tkinter.Toplevel()
-        self.text_box = Tkinter.Text(self.error_window, wrap='word')
-        self.text_box.insert('end', message)
-        self.text_box['state'] = 'disabled'
-        self.text_box.pack(side='left')
+        self.error_text_box = Tkinter.Text(self.error_window, wrap='word')
+        self.error_text_box.insert('end', message)
+        self.error_text_box['state'] = 'disabled'
 
         self.scrollbar = Tkinter.Scrollbar(self.error_window)
-        self.scrollbar.pack(side='right')
-        self.scrollbar['command'] = self.text_box.yview
-        self.text_box['yscrollcommand'] = self.scrollbar.set
+        self.scrollbar['command'] = self.error_text_box.yview
+        self.error_text_box['yscrollcommand'] = self.scrollbar.set
 
         self.log_btn = Tkinter.Button(self.error_window, text=u'Вывести логи')
         self.log_btn.bind('<Button-1>', self.load_logs)
+
+        self.error_text_box.pack(side='left')
+        self.scrollbar.pack(side='right')
         self.log_btn.pack(side='bottom')
+
+        self.gen_btn['state'] = 'active'
+
+        self.root.wait_window(self.error_window)
 
     def run(self):
         """ The entry point """
