@@ -88,26 +88,29 @@ class Client(object):
             return False
 
     def send_person_data(self):
-        self.connect_to_server()
-        message = self.connector.join([field.get() for field in
-            [self.lastname, self.firstname, self.middlename, self.birth_date]])
-        self.form.destroy()
-        print 'message: {}'.format(message)
-        try:
-            self.sock.sendall('add{}{}\n'.format(self.connector, message))
-        except socket.error, e:
-            self.log('Error sending data', e)
-        print 'message has been sent'
+        res = False
+        if self.connect_to_server():
+            message = self.connector.join([field.get() for field in
+                [self.lastname, self.firstname, self.middlename, self.birth_date]])
+            self.form.destroy()
+            print 'message: {}'.format(message)
+            try:
+                self.sock.sendall('add{}{}\n'.format(self.connector, message))
+            except socket.error, e:
+                self.log('Error sending data', e)
+                self.sock.close()
+                return
+            print 'message has been sent'
 
-        try:
-            res = self.sock.recv(1)
-            print res
-        except socket.error, e:
-            res = False
-            self.log('Error receiving data', e)
-        finally:
-            self.sock.close()
-            self.show_add_person_result(success=res)
+            try:
+                res = self.sock.recv(1)
+                print res
+            except socket.error, e:
+                res = False
+                self.log('Error receiving data', e)
+            finally:
+                self.sock.close()
+        self.show_add_person_result(success=res)
 
     def request_records(self):
         if self.connect_to_server():
@@ -198,6 +201,7 @@ class Client(object):
         label_text = u'Успешно' if success else u'Ошибка'
         print label_text
         label = Tkinter.Label(result_window, text=label_text)
+        label.config(font=("Courier", 32))
         ok_btn = Tkinter.Button(
             result_window, text=u'OK', command=result_window.destroy)
         label.pack()
