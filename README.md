@@ -49,6 +49,7 @@ To run the server app from server directory:
 2. `python server.py`
 
 To run the client app:
-3. `python client.py`
+
+1. `python client.py`
 
 **Note**: server and client may be run in random order
