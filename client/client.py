@@ -6,7 +6,6 @@ import datetime
 from time import sleep
 
 class Client(object):
-    """docstring for Client."""
     def __init__(self, host='localhost', port=9000):
         super(Client, self).__init__()
         self.host = host

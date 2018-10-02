@@ -43,10 +43,12 @@ $ apt-get install python-tk
 
 # Run
 
-To run the app from the project root directory:
+To run the server app from server directory:
 
 1. `celery -A tasks worker --loglevel=info`
-2. `python server/server.py`
-3. `python client/client.py`
+2. `python server.py`
+
+To run the client app:
+3. `python client.py`
 
 **Note**: server and client may be run in random order
